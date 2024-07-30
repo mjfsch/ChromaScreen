@@ -159,6 +159,7 @@ class Panel(ScreenPanel):
         GLib.timeout_add_seconds(1, self.get_updates, "true")
 
     def get_updates(self, refresh="false"):
+        self.ChromaScreenNeedUpdate = self._screen.base_panel.need_update()
         update_resp = self._screen.apiclient.send_request(f"machine/update/status?refresh={refresh}")
         if not update_resp:
             self.update_status = {}
@@ -194,23 +195,23 @@ class Panel(ScreenPanel):
     def VersionControl(self, widget, name):
 
         if name == 'ChromaScreen':
-            self._screen.base_panel.update_project()
+            self._screen.base_panel.open_dialog()
         else:
             isDialogShow = True
-            if name == "klipper" and self.IsKlipperNeedUpdate:
-                isDialogShow = False
+            # if name == "klipper" and self.IsKlipperNeedUpdate:
+            #     isDialogShow = False
             
-            if name == "mainsail" and self.IsMainsailNeedUpdate:
-                isDialogShow = False
+            # if name == "mainsail" and self.IsMainsailNeedUpdate:
+            #     isDialogShow = False
                 
-            if name == "moonraker" and self.IsMoonrakerNeedUpdate:
-                isDialogShow = False
+            # if name == "moonraker" and self.IsMoonrakerNeedUpdate:
+            #     isDialogShow = False
 
-            if name == "full" and (self.IsMainsailNeedUpdate and self.self.IsKlipperNeedUpdate):
-                isDialogShow = False
+            # if name == "full" and (self.IsMainsailNeedUpdate and self.self.IsKlipperNeedUpdate):
+            #     isDialogShow = False
 
             if isDialogShow:  
-                content = _("Your update may not be compatible with ChromaScreen. Still Do you want to update?")  
+                content = _("Your update may not be compatible with ChromaScreen.\nChromaScreen is compatible with:\nKlipper: v0.12.0-268.\nMoonraker: v0.9.1-0.\nMainsail: v2.12.0.\nStill Do you want to update?") 
                 dialog = AreYouSureDialog( content, self)
                 dialog.get_style_context().add_class("network-dialog")
                 dialog.set_decorated(False)
